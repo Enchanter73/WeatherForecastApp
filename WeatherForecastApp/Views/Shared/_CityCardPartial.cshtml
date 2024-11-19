@@ -1,0 +1,12 @@
+﻿@model CityWeatherViewModel
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">@Model.CityName</h5>
+        <p class="card-text">Temperature: @Model.Temperature °C</p>
+        <form asp-action="AddToFavorites" method="post" style="display:inline;">
+            <input type="hidden" name="cityName" value="@Model.CityName" />
+            <button type="submit" class="btn btn-sm btn-warning">Add to Favorites</button>
+        </form>
+    </div>
+</div>

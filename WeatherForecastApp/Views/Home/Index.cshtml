@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Weather Forecast";
+}
+@model List<CityWeatherViewModel>
+
+<div class="container">
+    <h2>Check Weather Forecast</h2>
+    <form asp-action="SearchCities" method="post">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" name="cityNames" placeholder="Enter city names (e.g., London, Paris)" required>
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </form>
+
+    <!-- Results Section -->
+    <div id="results">
+        @if (Model != null)
+        {
+            foreach (var city in Model)
+            {
+                @await Html.PartialAsync("_CityCardPartial", city)
+            }
+        }
+    </div>
+</div>

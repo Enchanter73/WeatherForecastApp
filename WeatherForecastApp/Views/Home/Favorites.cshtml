@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "My Favorite Cities";
+}
+
+@model List<CityWeatherViewModel>
+
+<h2>@ViewData["Title"]</h2>
+
+@if (Model != null && Model.Count > 0)
+{
+    <div>
+        <h3>Your Favorite Cities:</h3>
+        <div id="favorites-list">
+            @foreach (var city in Model)
+            {
+                <p>@city.CityName - @city.Temperature°C</p>
+            }
+        </div>
+
+        <h4>Hottest City: @Model.OrderByDescending(c => c.Temperature).FirstOrDefault()?.CityName</h4>
+        <h4>Coldest City: @Model.OrderBy(c => c.Temperature).FirstOrDefault()?.CityName</h4>
+    </div>
+}
+else
+{
+    <p>You have no favorite cities yet.</p>
+}
+
+<a href="/">Back to Search</a>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).on('click', '#add-to-favorites-btn', function () {
+        const cityName = $(this).data('city');
+
+        $.ajax({
+            url: '/HomeController/AddToFavorites',
+            type: 'POST',
+            data: { cityName: cityName },
+            success: function (response) {
+                if (response.success) {
+                    $('#favorites-list').append(
+                        `<p>${response.city.cityName} - ${response.city.temperature}°C</p>`
+                    );
+                    alert(`${response.city.cityName} has been added to your favorites!`);
+                }
+            },
+            error: function () {
+                alert('Failed to add the city to favorites.');
+            }
+        });
+    });
+</script>

@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+  weatherapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: weatherapp
+    ports:
+      - "5000:80"
+    networks:
+      - weatherapp_network
+    depends_on:
+      - postgres
+      - redis
+  postgres:
+    image: postgres:15
+    container_name: weatherapp_postgres
+    environment:
+      POSTGRES_USER: yourusername
+      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: weatherappdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - weatherapp_network
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - weatherapp_network
+volumes:
+  postgres_data:
+
+networks:
+  weatherapp_network:
+    driver: bridge
